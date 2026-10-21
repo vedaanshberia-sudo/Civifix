@@ -210,29 +210,120 @@ footer{text-align:center;padding:25px;color:#81887c;font-size:11px}
   CivicFix India · Private civic reporting · Not an official government portal
 </footer>
 
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+const SUPABASE_URL = "https://zoygkdofmgbofxvhphji.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_hpb0q6seV0pTDQNvziYYlQ__0tinzVu";
 const OWNER_EMAIL = "vedaanshberia@gmail.com";
 
-// These functions only control the page layout.
-// They do NOT authenticate users or securely save or send complaints.
-function openComplaint() {
-  document.getElementById("complaintPage").classList.remove("hidden");
-  document.getElementById("complaintPage").scrollIntoView({behavior:"smooth"});
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
+const signInButton = document.getElementById("signIn");
+const signedOut = document.getElementById("signedOut");
+const complaintPage = document.getElementById("complaintPage");
+const adminPage = document.getElementById("adminPage");
+
+function showMessage(message) {
+  alert(message);
 }
 
-document.getElementById("signIn").addEventListener("click", () => {
-  alert("Google sign-in is not connected yet. It must be implemented using a secure authentication service.");
+async function updatePage() {
+  const { data, error } = await db.auth.getSession();
+
+  if (error) {
+    showMessage("Could not check sign-in: " + error.message);
+    return;
+  }
+
+  const session = data.session;
+  const user = session?.user;
+
+  signedOut.classList.toggle("hidden", !!user);
+  complaintPage.classList.add("hidden");
+  adminPage.classList.add("hidden");
+
+  if (!user) {
+    signInButton.textContent = "Sign in with Google ↗";
+    signInButton.onclick = signIn;
+    return;
+  }
+
+  signInButton.textContent = "Sign out";
+  signInButton.onclick = signOut;
+
+  complaintPage.classList.remove("hidden");
+
+  if ((user.email || "").toLowerCase() === OWNER_EMAIL) {
+    adminPage.classList.remove("hidden");
+  }
+}
+
+async function signIn() {
+  const { error } = await db.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: window.location.origin
+    }
+  });
+
+  if (error) showMessage("Sign-in error: " + error.message);
+}
+
+async function signOut() {
+  const { error } = await db.auth.signOut();
+
+  if (error) {
+    showMessage("Sign-out error: " + error.message);
+    return;
+  }
+
+  await updatePage();
+}
+
+document.getElementById("complaintForm").addEventListener(
+  "submit",
+  event => {
+    event.preventDefault();
+    showMessage(
+      "Sign-in is connected, but complaint submission is not connected yet."
+    );
+  }
+);
+
+document.getElementById("routingForm").addEventListener(
+  "submit",
+  event => {
+    event.preventDefault();
+    showMessage(
+      "Database saving for routing rules will be connected next."
+    );
+  }
+);
+
+db.auth.onAuthStateChange((event, session) => {
+  if (event === "SIGNED_IN" || event === "SIGNED_OUT") {
+    updatePage();
+  }
 });
 
-document.getElementById("complaintForm").addEventListener("submit", event => {
-  event.preventDefault();
-  alert("The form design is ready, but secure complaint submission and email delivery have not been connected. Do not enter real personal information yet.");
-});
+updatePage();
 
-document.getElementById("routingForm").addEventListener("submit", event => {
-  event.preventDefault();
-  alert("Admin routing requires verified administrator sign-in and secure database storage before rules can be saved.");
-});
+window.openComplaint = function () {
+  const target = document.getElementById("complaintPage");
+
+  if (target.classList.contains("hidden")) {
+    showMessage("Please sign in with Google before filing a complaint.");
+    return;
+  }
+
+  target.scrollIntoView({ behavior: "smooth" });
+};
 </script>
+
+
 </body>
 </html>
