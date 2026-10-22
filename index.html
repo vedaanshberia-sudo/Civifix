@@ -554,26 +554,7 @@ if (notify.error) {
     }
   });
 
-  async function linkOfficialAccount() {
-    if (!currentUser) return message("officialStatus", "Sign in first.", true);
-    const button = $("linkOfficial");
-    setBusy(button, true, "Linking account…");
-    clearMessage("officialStatus");
-    try {
-      const {data, error} = await db.rpc("link_my_municipal_account");
-      if (error) throw error;
-      message("officialStatus",
-        typeof data === "string" ? data : "Your account-link request completed. If no eligible official record was found, ask the administrator to check your registered email and active status.");
-    } catch (error) {
-      console.error(error);
-      message("officialStatus",
-        "Could not link your account: " + (error.message || "Unknown error") +
-        "\nConfirm that the link_my_municipal_account SQL function has been created in Supabase.", true);
-    } finally {
-      setBusy(button, false);
-    }
-  }
-  $("linkOfficial").addEventListener("click", linkOfficialAccount);
+  
 
   function resetRoutingForm() {
     $("routingForm").reset();
