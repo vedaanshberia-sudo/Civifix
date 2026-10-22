@@ -344,7 +344,7 @@ footer{text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:1
     $("signedOut").classList.toggle("hidden", signedIn);
     $("complaintPage").classList.toggle("hidden", !signedIn);
     $("adminPage").classList.toggle("hidden", !isAdmin);
-    $("officialPage").classList.toggle("hidden", !signedIn || isAdmin);
+
     $("signIn").textContent = signedIn ? "Sign out ↗" : "Sign in with Google ↗";
     $("userLabel").textContent = signedIn ? currentUser.email : "";
 
