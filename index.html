@@ -532,16 +532,16 @@ footer{text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:1
       if (uploadedPath) resultMessage += " Your photo was uploaded to private storage.";
 
       // The notification function must be deployed and configured separately.
-      const notify = await db.functions.invoke("notify-complaint", {
-        body:{complaint_id:data.id}
-      });
+const notify = await db.functions.invoke("notify-complaint", {
+  body:{complaint_id:data.id}
+});
 
-      if (notify.error) {
-        console.warn("Email notification was not sent:", notify.error);
-        resultMessage += " The complaint is saved, but the email notification could not be confirmed.";
-      } else {
-        resultMessage += " The notification service was contacted.";
-      }
+if (notify.error) {
+  console.warn("Email notification was not sent:", notify.error);
+  resultMessage += " The complaint is saved, but the email notification could not be confirmed.";
+} else {
+  resultMessage += " The notification service was contacted.";
+}
 
       message("formStatus", resultMessage);
       $("complaintForm").reset();
