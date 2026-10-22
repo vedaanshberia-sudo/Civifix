@@ -7,92 +7,93 @@
 <meta name="theme-color" content="#f7f7f0">
 <title>CivicFix India — Your City, Your Voice</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
 
 :root {
-  --bg:#f7f7f0; --ink:#26362c; --green:#d5f68b;
-  --purple:#e8dcff; --orange:#ffbd91; --line:#e7e8dd;
-  --muted:#6c786d; --white:#fff; --red:#a33d39;
+  --bg:#f7f7f0;--ink:#26362c;--green:#d5f68b;
+  --purple:#e8dcff;--orange:#ffbd91;--line:#e7e8dd;
+  --muted:#6c786d;--white:#fff;--red:#a33d39;
 }
-* {box-sizing:border-box}
-html {scroll-behavior:smooth}
-body {margin:0;background:var(--bg);color:var(--ink);font:14px 'DM Sans',sans-serif}
-button,input,select,textarea {font:inherit}
-button {border:0;border-radius:13px;padding:13px 17px;font-weight:800;cursor:pointer;transition:transform .18s,opacity .18s}
-button:hover:not(:disabled) {transform:translateY(-2px)}
-button:disabled {opacity:.5;cursor:not-allowed}
-a {color:inherit}
-header {max-width:1160px;margin:auto;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;gap:14px}
-.logo {font:700 25px 'Space Grotesk',sans-serif;letter-spacing:-1px}
-.logo span {color:#7958c4}
-.header-actions {display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-main {max-width:1160px;margin:auto;padding:10px 24px 60px}
-.dark {background:var(--ink);color:white}
-.green {background:var(--green);color:var(--ink)}
-.lavender {background:var(--purple);color:var(--ink)}
-.light {background:white;border:1px solid var(--line);color:var(--ink)}
-.danger {background:#fff0ed;color:#a33d39}
-.hero {display:grid;grid-template-columns:1.05fr .95fr;gap:32px;align-items:center;padding:48px;border-radius:30px;background:#e9f1dd;overflow:hidden}
-.tag {font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase}
-h1,h2,h3 {font-family:'Space Grotesk',sans-serif}
-h1 {font-size:clamp(42px,6vw,74px);line-height:1.01;letter-spacing:-3.5px;margin:18px 0}
-h1 span {color:#7958c4}
-h2 {font-size:clamp(24px,3vw,32px);letter-spacing:-1px;margin:8px 0}
-h3 {font-size:18px;margin:6px 0}
-p {line-height:1.75;color:var(--muted)}
-.hero p {max-width:470px}
-.hero-buttons {display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
-.art {min-height:320px;border-radius:25px;background:var(--purple);display:grid;place-items:center;position:relative;overflow:hidden}
-.city-art {font-size:clamp(80px,12vw,140px);filter:drop-shadow(0 12px 10px #26362c15);animation:float 4s ease-in-out infinite}
-.art-label {position:absolute;bottom:16px;right:16px;background:white;padding:12px 15px;border-radius:12px;font-size:10px;font-weight:800;letter-spacing:1px}
-@keyframes float {50% {transform:translateY(-9px)}}
-.features {display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:22px}
-.feature {padding:21px;background:white;border:1px solid var(--line);border-radius:20px}
-.feature-icon {font-size:26px}
-.feature h3 {margin-top:13px}
-.panel {background:white;border:1px solid var(--line);border-radius:23px;padding:28px;margin-top:22px;scroll-margin-top:20px}
-.panel-head {display:flex;justify-content:space-between;align-items:flex-start;gap:15px;flex-wrap:wrap}
-.grid {display:grid;grid-template-columns:1fr 1fr;gap:15px}
-.full {grid-column:1/-1}
-label {display:block;font-size:12px;font-weight:800;margin:15px 0 7px}
-input,select,textarea {display:block;width:100%;padding:13px 14px;margin-top:7px;border:1px solid var(--line);border-radius:12px;background:#fbfbf8;color:var(--ink);outline:none}
-input:focus,select:focus,textarea:focus {border-color:#9277d5;box-shadow:0 0 0 3px #e8dcff}
-textarea {resize:vertical;min-height:120px}
-.note {font-size:11px;color:#858c81;line-height:1.7}
-.status {padding:13px 15px;border-radius:12px;background:#edf5e4;margin-top:15px;white-space:pre-wrap;line-height:1.6;overflow-wrap:anywhere}
-.status.error {background:#fff0ed;color:#8c302c}
-.hidden {display:none!important}
-hr {border:0;border-top:1px solid var(--line);margin:25px 0}
-.badge {display:inline-flex;padding:6px 10px;border-radius:99px;background:#edf5e4;font-size:11px;font-weight:800}
-.cards {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-top:17px}
-.item {padding:17px;border:1px solid var(--line);border-radius:16px;min-width:0}
-.item p {font-size:12px;overflow-wrap:anywhere}
-.item-actions {display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.item-actions button {padding:9px 12px;font-size:11px}
-.empty {padding:20px;border-radius:14px;background:#fbfbf8;color:var(--muted);margin-top:15px;line-height:1.7}
-.camera-box {background:#f6f1ff;border-radius:17px;padding:18px;margin-top:18px}
-.camera-box video {display:block;width:100%;max-height:300px;background:#26362c;border-radius:12px;margin:12px 0;object-fit:cover}
-.photo-preview {display:block;max-width:100%;max-height:240px;border-radius:12px;margin-top:12px}
-.modal-backdrop {position:fixed;inset:0;background:#1d2922a8;display:grid;place-items:center;padding:20px;z-index:20}
-.modal {background:white;width:min(440px,100%);padding:27px;border-radius:24px;box-shadow:0 25px 80px #0002}
-.modal-icon {font-size:42px}
-.modal-buttons {display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
-footer {text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:1.8}
-:focus-visible {outline:3px solid #9277d5;outline-offset:3px}
-@media(max-width:720px) {
-  header {padding:17px}
-  main {padding:8px 15px 35px}
-  .hero {grid-template-columns:1fr;padding:27px;gap:20px}
-  .art {min-height:200px}
-  .features {grid-template-columns:1fr}
-  .grid,.cards {grid-template-columns:1fr}
-  .full {grid-column:auto}
-  .panel {padding:20px}
-  h1 {letter-spacing:-2px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px 'DM Sans',sans-serif}
+button,input,select,textarea{font:inherit}
+button{border:0;border-radius:13px;padding:13px 17px;font-weight:800;cursor:pointer;transition:transform .18s,opacity .18s}
+button:hover:not(:disabled){transform:translateY(-2px)}
+button:disabled{opacity:.5;cursor:not-allowed}
+a{color:inherit}
+header{max-width:1160px;margin:auto;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;gap:14px}
+.logo{font:700 25px 'Space Grotesk',sans-serif;letter-spacing:-1px}
+.logo span{color:#7958c4}
+.header-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+main{max-width:1160px;margin:auto;padding:10px 24px 60px}
+.dark{background:var(--ink);color:white}
+.green{background:var(--green);color:var(--ink)}
+.lavender{background:var(--purple);color:var(--ink)}
+.light{background:white;border:1px solid var(--line);color:var(--ink)}
+.danger{background:#fff0ed;color:#a33d39}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:32px;align-items:center;padding:48px;border-radius:30px;background:#e9f1dd;overflow:hidden}
+.tag{font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase}
+h1,h2,h3{font-family:'Space Grotesk',sans-serif}
+h1{font-size:clamp(42px,6vw,74px);line-height:1.01;letter-spacing:-3.5px;margin:18px 0}
+h1 span{color:#7958c4}
+h2{font-size:clamp(24px,3vw,32px);letter-spacing:-1px;margin:8px 0}
+h3{font-size:18px;margin:6px 0}
+p{line-height:1.75;color:var(--muted)}
+.hero p{max-width:470px}
+.hero-buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.art{min-height:320px;border-radius:25px;background:var(--purple);display:grid;place-items:center;position:relative;overflow:hidden}
+.city-art{font-size:clamp(80px,12vw,140px);filter:drop-shadow(0 12px 10px #26362c15);animation:float 4s ease-in-out infinite}
+.art-label{position:absolute;bottom:16px;right:16px;background:white;padding:12px 15px;border-radius:12px;font-size:10px;font-weight:800;letter-spacing:1px}
+@keyframes float{50%{transform:translateY(-9px)}}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:22px}
+.feature{padding:21px;background:white;border:1px solid var(--line);border-radius:20px}
+.feature-icon{font-size:26px}
+.feature h3{margin-top:13px}
+.panel{background:white;border:1px solid var(--line);border-radius:23px;padding:28px;margin-top:22px;scroll-margin-top:20px}
+.panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;flex-wrap:wrap}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.full{grid-column:1/-1}
+label{display:block;font-size:12px;font-weight:800;margin:15px 0 7px}
+input,select,textarea{display:block;width:100%;padding:13px 14px;margin-top:7px;border:1px solid var(--line);border-radius:12px;background:#fbfbf8;color:var(--ink);outline:none}
+input:focus,select:focus,textarea:focus{border-color:#9277d5;box-shadow:0 0 0 3px #e8dcff}
+textarea{resize:vertical;min-height:120px}
+.note{font-size:11px;color:#858c81;line-height:1.7}
+.status{padding:13px 15px;border-radius:12px;background:#edf5e4;margin-top:15px;white-space:pre-wrap;line-height:1.6;overflow-wrap:anywhere}
+.status.error{background:#fff0ed;color:#8c302c}
+.hidden{display:none!important}
+hr{border:0;border-top:1px solid var(--line);margin:25px 0}
+.badge{display:inline-flex;padding:6px 10px;border-radius:99px;background:#edf5e4;font-size:11px;font-weight:800}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-top:17px}
+.item{padding:17px;border:1px solid var(--line);border-radius:16px;min-width:0}
+.item p{font-size:12px;overflow-wrap:anywhere}
+.item-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.item-actions button{padding:9px 12px;font-size:11px}
+.empty{padding:20px;border-radius:14px;background:#fbfbf8;color:var(--muted);margin-top:15px;line-height:1.7}
+.camera-box{background:#f6f1ff;border-radius:17px;padding:18px;margin-top:18px}
+.camera-box video{display:block;width:100%;max-height:300px;background:#26362c;border-radius:12px;margin:12px 0;object-fit:cover}
+.photo-preview{display:block;max-width:100%;max-height:240px;border-radius:12px;margin-top:12px}
+.modal-backdrop{position:fixed;inset:0;background:#1d2922a8;display:grid;place-items:center;padding:20px;z-index:20}
+.modal{background:white;width:min(440px,100%);padding:27px;border-radius:24px;box-shadow:0 25px 80px #0002}
+.modal-icon{font-size:42px}
+.modal-buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+footer{text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:1.8}
+:focus-visible{outline:3px solid #9277d5;outline-offset:3px}
+@media(max-width:720px){
+  header{padding:17px}
+  main{padding:8px 15px 35px}
+  .hero{grid-template-columns:1fr;padding:27px;gap:20px}
+  .art{min-height:200px}
+  .features{grid-template-columns:1fr}
+  .grid,.cards{grid-template-columns:1fr}
+  .full{grid-column:auto}
+  .panel{padding:20px}
+  h1{letter-spacing:-2px}
 }
-@media(prefers-reduced-motion:reduce) {
-  *,*::before,*::after {scroll-behavior:auto!important;animation:none!important;transition:none!important}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}
 }
 </style>
 </head>
@@ -124,21 +125,9 @@ footer {text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:
   </section>
 
   <section class="features" id="howItWorks">
-    <article class="feature">
-      <div class="feature-icon">📍</div>
-      <h3>Report locally</h3>
-      <p>Describe the issue and provide its location so it can be routed to the right team.</p>
-    </article>
-    <article class="feature">
-      <div class="feature-icon">🔒</div>
-      <h3>Private by design</h3>
-      <p>Your complaints are not intended to be a public feed. Database policies control access.</p>
-    </article>
-    <article class="feature">
-      <div class="feature-icon">🌱</div>
-      <h3>Better neighbourhoods</h3>
-      <p>Keep your reports organised and help local teams identify problems.</p>
-    </article>
+    <article class="feature"><div class="feature-icon">📍</div><h3>Report locally</h3><p>Describe the issue and provide its location so it can be routed to the right team.</p></article>
+    <article class="feature"><div class="feature-icon">🔒</div><h3>Private by design</h3><p>Your complaints are not intended to be a public feed. Database policies control access.</p></article>
+    <article class="feature"><div class="feature-icon">🌱</div><h3>Better neighbourhoods</h3><p>Keep your reports organised and help local teams identify problems.</p></article>
   </section>
 
   <section id="signedOut" class="panel">
@@ -151,11 +140,7 @@ footer {text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:
 
   <section id="complaintPage" class="panel hidden">
     <div class="panel-head">
-      <div>
-        <div class="tag">✦ Your community matters</div>
-        <h2>Tell us what's happening.</h2>
-        <p>Give enough detail for the local team to identify the issue.</p>
-      </div>
+      <div><div class="tag">✦ Your community matters</div><h2>Tell us what's happening.</h2><p>Give enough detail for the local team to identify the issue.</p></div>
       <span class="badge">Private complaint</span>
     </div>
 
@@ -165,82 +150,51 @@ footer {text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:
           <label for="state">State / Union Territory *</label>
           <select id="state" required>
             <option value="">Select state / UT</option>
-            <option>Andhra Pradesh</option><option>Arunachal Pradesh</option>
-            <option>Assam</option><option>Bihar</option><option>Chhattisgarh</option>
-            <option>Goa</option><option>Gujarat</option><option>Haryana</option>
-            <option>Himachal Pradesh</option><option>Jharkhand</option>
-            <option>Karnataka</option><option>Kerala</option><option>Madhya Pradesh</option>
-            <option>Maharashtra</option><option>Manipur</option><option>Meghalaya</option>
-            <option>Mizoram</option><option>Nagaland</option><option>Odisha</option>
-            <option>Punjab</option><option>Rajasthan</option><option>Sikkim</option>
-            <option>Tamil Nadu</option><option>Telangana</option><option>Tripura</option>
-            <option>Uttar Pradesh</option><option>Uttarakhand</option><option>West Bengal</option>
-            <option>Andaman and Nicobar Islands</option><option>Chandigarh</option>
-            <option>Dadra and Nagar Haveli and Daman and Diu</option><option>Delhi</option>
-            <option>Jammu and Kashmir</option><option>Ladakh</option>
-            <option>Lakshadweep</option><option>Puducherry</option>
+            <option>Andhra Pradesh</option><option>Arunachal Pradesh</option><option>Assam</option><option>Bihar</option><option>Chhattisgarh</option><option>Goa</option><option>Gujarat</option><option>Haryana</option><option>Himachal Pradesh</option><option>Jharkhand</option><option>Karnataka</option><option>Kerala</option><option>Madhya Pradesh</option><option>Maharashtra</option><option>Manipur</option><option>Meghalaya</option><option>Mizoram</option><option>Nagaland</option><option>Odisha</option><option>Punjab</option><option>Rajasthan</option><option>Sikkim</option><option>Tamil Nadu</option><option>Telangana</option><option>Tripura</option><option>Uttar Pradesh</option><option>Uttarakhand</option><option>West Bengal</option><option>Andaman and Nicobar Islands</option><option>Chandigarh</option><option>Dadra and Nagar Haveli and Daman and Diu</option><option>Delhi</option><option>Jammu and Kashmir</option><option>Ladakh</option><option>Lakshadweep</option><option>Puducherry</option>
           </select>
         </div>
-        <div>
-          <label for="city">City *</label>
-          <input id="city" required maxlength="100" placeholder="e.g. Guwahati">
-        </div>
-        <div>
-          <label for="road">Road / Street *</label>
-          <input id="road" required maxlength="180" placeholder="e.g. GS Road">
-        </div>
-        <div>
-          <label for="landmark">Nearby landmark</label>
-          <input id="landmark" maxlength="180" placeholder="e.g. Near the city library">
-        </div>
+        <div><label for="city">City *</label><input id="city" required maxlength="100" placeholder="e.g. Guwahati"></div>
+        <div><label for="road">Road / Street *</label><input id="road" required maxlength="180" placeholder="e.g. GS Road"></div>
+        <div><label for="landmark">Nearby landmark</label><input id="landmark" maxlength="180" placeholder="e.g. Near the city library"></div>
         <div class="full">
           <label for="category">Complaint category *</label>
-          <select id="category" required>
-            <option value="">Select a category</option>
-            <option>Roads and potholes</option><option>Streetlights</option>
-            <option>Garbage and waste</option><option>Water supply</option>
-            <option>Drainage and flooding</option><option>Parks and public spaces</option>
-            <option>Other civic issue</option>
-          </select>
+          <select id="category" required><option value="">Select a category</option><option>Roads and potholes</option><option>Streetlights</option><option>Garbage and waste</option><option>Water supply</option><option>Drainage and flooding</option><option>Parks and public spaces</option><option>Other civic issue</option></select>
         </div>
         <div class="full">
           <label for="description">Describe the issue *</label>
-          <textarea id="description" required minlength="10" maxlength="2000"
-            placeholder="What is happening? Where exactly? When did you notice it?"></textarea>
+          <textarea id="description" required minlength="10" maxlength="2000" placeholder="What is happening? Where exactly? When did you notice it?"></textarea>
           <div class="note">10–2,000 characters. Please avoid including sensitive personal information.</div>
         </div>
         <div class="full">
           <label for="photo">Attach a photo (optional)</label>
           <input id="photo" type="file" accept="image/jpeg,image/png,image/webp">
-          <div class="note">JPG, PNG or WebP, up to 5 MB. Photo upload will be enabled after Storage is configured.</div>
+          <div class="note">JPG, PNG or WebP, up to 5 MB. Photos are uploaded to private Storage when configured.</div>
           <button class="lavender" id="openCamera" type="button" style="margin-top:12px">📷 Take a photo</button>
           <div id="cameraBox" class="camera-box hidden">
             <video id="cameraVideo" autoplay playsinline muted></video>
-            <div class="item-actions">
-              <button id="capturePhoto" class="dark" type="button">Capture photo</button>
-              <button id="closeCamera" class="light" type="button">Close camera</button>
-            </div>
+            <div class="item-actions"><button id="capturePhoto" class="dark" type="button">Capture photo</button><button id="closeCamera" class="light" type="button">Close camera</button></div>
             <canvas id="cameraCanvas" class="hidden"></canvas>
             <img id="photoPreview" class="photo-preview hidden" alt="Captured complaint photo preview">
+            <button id="removePhoto" class="danger hidden" type="button" style="margin-top:10px">Remove captured photo</button>
             <div id="cameraStatus" class="note" role="status"></div>
           </div>
         </div>
-        <div class="full">
-          <button class="green" id="submitComplaint" type="submit">Submit private complaint ↗</button>
-        </div>
+        <div class="full"><button class="green" id="submitComplaint" type="submit">Submit private complaint ↗</button></div>
       </div>
       <div id="formStatus" class="status hidden" role="status"></div>
     </form>
 
     <hr>
-    <div class="panel-head">
-      <div>
-        <div class="tag">Your activity</div>
-        <h2>Your complaints</h2>
-      </div>
-      <button class="light" id="refreshComplaints" type="button">↻ Refresh</button>
-    </div>
+    <div class="panel-head"><div><div class="tag">Your activity</div><h2>Your complaints</h2></div><button class="light" id="refreshComplaints" type="button">↻ Refresh</button></div>
     <div id="myComplaints" class="empty">Your permitted complaints will appear here.</div>
+  </section>
+
+  <section id="officialPage" class="panel hidden">
+    <div class="tag">Municipal official</div>
+    <h2>Link your official account</h2>
+    <p>Sign in using the same Google email that the administrator registered for your municipal team. This links your authenticated account to the official record, if the record is active and eligible.</p>
+    <button class="dark" id="linkOfficial" type="button">Link my municipal account</button>
+    <div id="officialStatus" class="status hidden" role="status"></div>
   </section>
 
   <section id="adminPage" class="panel hidden">
@@ -251,70 +205,34 @@ footer {text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:
     <form id="routingForm">
       <input type="hidden" id="routeEditId">
       <div class="grid">
-        <div>
-          <label for="routeState">State / UT *</label>
-          <input id="routeState" required maxlength="100" placeholder="e.g. Assam">
-        </div>
-        <div>
-          <label for="routeCity">City *</label>
-          <input id="routeCity" required maxlength="100" placeholder="e.g. Guwahati">
-        </div>
-        <div>
-          <label for="routeRoad">Road / Street (optional)</label>
-          <input id="routeRoad" maxlength="180" placeholder="Blank means any road in the city">
-        </div>
-        <div>
-          <label for="routeLandmark">Landmark (optional)</label>
-          <input id="routeLandmark" maxlength="180" placeholder="Optional specific landmark">
-        </div>
-        <div>
-          <label for="routeEmail">Municipal recipient email *</label>
-          <input id="routeEmail" type="email" required maxlength="254" placeholder="municipal.team@example.in">
-        </div>
-        <div>
-          <label for="routeName">Team / official name *</label>
-          <input id="routeName" required maxlength="160" placeholder="e.g. Guwahati Roads Team">
-        </div>
-        <div class="full" style="display:flex;gap:10px;flex-wrap:wrap">
-          <button class="dark" id="saveRouting" type="submit">Save routing assignment</button>
-          <button class="light hidden" id="cancelEdit" type="button">Cancel edit</button>
-        </div>
+        <div><label for="routeState">State / UT *</label><input id="routeState" required maxlength="100" placeholder="e.g. Assam"></div>
+        <div><label for="routeCity">City *</label><input id="routeCity" required maxlength="100" placeholder="e.g. Guwahati"></div>
+        <div><label for="routeRoad">Road / Street (optional)</label><input id="routeRoad" maxlength="180" placeholder="Blank means any road in the city"></div>
+        <div><label for="routeLandmark">Landmark (optional)</label><input id="routeLandmark" maxlength="180" placeholder="Optional specific landmark"></div>
+        <div><label for="routeEmail">Municipal recipient email *</label><input id="routeEmail" type="email" required maxlength="254" placeholder="municipal.team@example.in"></div>
+        <div><label for="routeName">Team / official name *</label><input id="routeName" required maxlength="160" placeholder="e.g. Guwahati Roads Team"></div>
+        <div class="full" style="display:flex;gap:10px;flex-wrap:wrap"><button class="dark" id="saveRouting" type="submit">Save routing assignment</button><button class="light hidden" id="cancelEdit" type="button">Cancel edit</button></div>
       </div>
       <div id="routingStatus" class="status hidden" role="status"></div>
     </form>
 
     <hr>
-    <div class="panel-head">
-      <div>
-        <h3>Saved routing assignments</h3>
-        <p>Assignments stored in your Supabase database.</p>
-      </div>
-      <button class="light" id="refreshRouting" type="button">↻ Refresh</button>
-    </div>
+    <div class="panel-head"><div><h3>Saved routing assignments</h3><p>Assignments stored in your Supabase database.</p></div><button class="light" id="refreshRouting" type="button">↻ Refresh</button></div>
     <div id="routingList" class="empty">Loading routing assignments…</div>
-    <div class="status">
-      <strong>Official account setup:</strong> Saving an email does not grant that person access. An authorized official's authenticated Supabase user ID must be linked securely to their municipal record.
-    </div>
+    <div class="status"><strong>Security:</strong> Saving an email does not grant access. The official must sign in and link an eligible account. Database policies must enforce access on the server.</div>
   </section>
 </main>
 
 <div id="cameraModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="cameraModalTitle">
   <div class="modal">
-    <div class="modal-icon">📷</div>
-    <div class="tag">Optional camera access</div>
+    <div class="modal-icon">📷</div><div class="tag">Optional camera access</div>
     <h2 id="cameraModalTitle">Add a photo to your report?</h2>
-    <p>CivicFix can use your camera when you choose to take a complaint photo. It won't take a picture automatically. You can also continue without camera access.</p>
-    <div class="modal-buttons">
-      <button id="enableCamera" class="dark" type="button">Enable camera</button>
-      <button id="skipCamera" class="light" type="button">Not now</button>
-    </div>
+    <p>CivicFix can use your camera when you choose to take a complaint photo. It won't take a picture automatically. You can continue without camera access.</p>
+    <div class="modal-buttons"><button id="enableCamera" class="dark" type="button">Enable camera</button><button id="skipCamera" class="light" type="button">Not now</button></div>
   </div>
 </div>
 
-<footer>
-  CivicFix India · Private civic reporting<br>
-  An independent community project, not an official government portal.
-</footer>
+<footer>CivicFix India · Private civic reporting<br>An independent community project, not an official government portal.</footer>
 
 <script>
 (() => {
@@ -323,16 +241,24 @@ footer {text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:
   const SUPABASE_URL = "https://zoygkdofmgbofxvhphji.supabase.co";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_hpb0q6seV0pTDQNvziYYlQ__0tinzVu";
   const OWNER_EMAIL = "vedaanshberia@gmail.com";
+  const PHOTO_BUCKET = "complaint-photos";
+  const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
+  const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
   const $ = id => document.getElementById(id);
-  const db = window.supabase?.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
+  const db = window.supabase?.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+    auth: {
+      storage: window.sessionStorage,
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
+    }
+  });
 
   let currentUser = null;
   let cameraStream = null;
   let capturedPhoto = null;
+  let previewUrl = null;
   let routingRows = [];
   let busy = false;
 
@@ -344,19 +270,16 @@ footer {text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:
   }
 
   function clearMessage(id) {
-    $(id).textContent = "";
-    $(id).classList.add("hidden");
-    $(id).classList.remove("error");
-  }
-
-  function safeText(value) {
-    return String(value ?? "");
+    const el = $(id);
+    el.textContent = "";
+    el.classList.add("hidden");
+    el.classList.remove("error");
   }
 
   function makeElement(tag, className, text) {
     const el = document.createElement(tag);
     if (className) el.className = className;
-    if (text !== undefined) el.textContent = text;
+    if (text !== undefined) el.textContent = String(text ?? "");
     return el;
   }
 
@@ -375,22 +298,28 @@ footer {text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:
   }
 
   function setBusy(button, value, label) {
-    button.disabled = value;
     if (value) {
-      button.dataset.originalText ||= button.textContent;
+      if (!button.dataset.originalText) button.dataset.originalText = button.textContent;
+      button.disabled = true;
       button.textContent = label || "Please wait…";
     } else {
+      button.disabled = false;
       button.textContent = button.dataset.originalText || button.textContent;
+      delete button.dataset.originalText;
     }
+  }
+
+  function normalise(value) {
+    return String(value || "").trim().toLocaleLowerCase("en-IN");
   }
 
   async function signIn() {
     if (!db) return alert("Supabase did not load. Refresh and try again.");
     const {error} = await db.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: window.location.origin + window.location.pathname,
-        queryParams: {prompt: "select_account"}
+      provider:"google",
+      options:{
+        redirectTo:window.location.origin + window.location.pathname,
+        queryParams:{prompt:"select_account"}
       }
     });
     if (error) alert("Google sign-in failed: " + error.message);
@@ -400,29 +329,37 @@ footer {text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:
     closeCamera();
     const {error} = await db.auth.signOut();
     if (error) return alert("Sign-out failed: " + error.message);
+    currentUser = null;
     await updatePage();
   }
 
   async function updatePage() {
+    if (!db) return;
     const {data, error} = await db.auth.getSession();
     if (error) {
       console.error(error);
+      message("authStatus", "Could not read your session: " + error.message, true);
       return;
     }
 
     currentUser = data.session?.user || null;
     const signedIn = !!currentUser;
-    const isAdmin = (currentUser?.email || "").toLowerCase() === OWNER_EMAIL;
+    const email = normalise(currentUser?.email);
+    const isAdmin = email === OWNER_EMAIL;
 
     $("signedOut").classList.toggle("hidden", signedIn);
     $("complaintPage").classList.toggle("hidden", !signedIn);
     $("adminPage").classList.toggle("hidden", !isAdmin);
+    $("officialPage").classList.toggle("hidden", !signedIn || isAdmin);
     $("signIn").textContent = signedIn ? "Sign out ↗" : "Sign in with Google ↗";
     $("userLabel").textContent = signedIn ? currentUser.email : "";
 
     if (signedIn) {
       await loadComplaints();
       if (isAdmin) await loadRoutingRules();
+    } else {
+      $("myComplaints").textContent = "Sign in to see your complaints.";
+      $("routingList").textContent = "Sign in with the admin account to manage routing.";
     }
   }
 
@@ -430,23 +367,22 @@ footer {text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:
     if (currentUser) await signOut();
     else await signIn();
   });
-  document.querySelectorAll(".googleSignIn").forEach(b => b.addEventListener("click", signIn));
+  document.querySelectorAll(".googleSignIn").forEach(button => button.addEventListener("click", signIn));
 
   $("reportButton").addEventListener("click", () => {
     const target = currentUser ? $("complaintPage") : $("signedOut");
     target.scrollIntoView({behavior:"smooth", block:"start"});
     if (!currentUser) message("authStatus", "Please sign in with Google before submitting a complaint.");
   });
-  $("howButton").addEventListener("click", () =>
-    $("howItWorks").scrollIntoView({behavior:"smooth", block:"start"}));
+  $("howButton").addEventListener("click", () => $("howItWorks").scrollIntoView({behavior:"smooth", block:"start"}));
 
   async function loadComplaints() {
+    if (!currentUser) return;
     const target = $("myComplaints");
     target.replaceChildren(makeElement("div", "empty", "Loading your complaints…"));
 
-    const {data, error} = await db
-      .from("complaints")
-      .select("id,state,city,road,landmark,category,description,status,created_at,assigned_official_id")
+    const {data, error} = await db.from("complaints")
+      .select("id,state,city,road,landmark,category,description,status,created_at,assigned_official_id,photo_path")
       .order("created_at", {ascending:false})
       .limit(100);
 
@@ -459,22 +395,34 @@ footer {text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:
 
     target.replaceChildren();
     if (!data?.length) {
-      target.appendChild(makeElement("div", "empty",
-        "No complaints found yet. Your submitted reports will appear here when permitted by database policies."));
+      target.appendChild(makeElement("div", "empty", "No complaints found yet. Submit your first report above."));
       return;
     }
 
     const cards = makeElement("div", "cards");
     for (const row of data) {
       const card = makeElement("article", "item");
-      card.appendChild(makeElement("span", "badge", safeText(row.status || "submitted")));
-      card.appendChild(makeElement("h3", "", safeText(row.category)));
+      card.appendChild(makeElement("span", "badge", row.status || "submitted"));
+      card.appendChild(makeElement("h3", "", row.category));
       card.appendChild(makeElement("p", "", [row.city, row.state].filter(Boolean).join(", ")));
-      card.appendChild(makeElement("p", "", safeText(row.road)));
-      card.appendChild(makeElement("p", "", safeText(row.description)));
+      card.appendChild(makeElement("p", "", row.road));
+      if (row.landmark) card.appendChild(makeElement("p", "", "Landmark: " + row.landmark));
+      card.appendChild(makeElement("p", "", row.description));
       card.appendChild(makeElement("div", "note", formatDate(row.created_at)));
       card.appendChild(makeElement("div", "note",
         row.assigned_official_id ? "Assigned to a municipal team" : "Awaiting a matching municipal assignment"));
+
+      if (row.photo_path) {
+        const photoButton = addButton(card, "View attached photo", "light", async () => {
+          photoButton.disabled = true;
+          const {data: signed, error: photoError} = await db.storage.from(PHOTO_BUCKET)
+            .createSignedUrl(row.photo_path, 60);
+          photoButton.disabled = false;
+          if (photoError) return alert("Could not open photo: " + photoError.message);
+          window.open(signed.signedUrl, "_blank", "noopener,noreferrer");
+        });
+        photoButton.style.marginTop = "12px";
+      }
       cards.appendChild(card);
     }
     target.appendChild(cards);
@@ -482,63 +430,156 @@ footer {text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:
 
   $("refreshComplaints").addEventListener("click", loadComplaints);
 
+  function getSelectedPhoto() {
+    return capturedPhoto || $("photo").files?.[0] || null;
+  }
+
+  function validatePhoto(file) {
+    if (!file) return null;
+    if (!ALLOWED_TYPES.includes(file.type)) return "Choose a JPG, PNG or WebP image.";
+    if (file.size > MAX_PHOTO_BYTES) return "The image must be 5 MB or smaller.";
+    return null;
+  }
+
+  function clearCapturedPhoto() {
+    capturedPhoto = null;
+    $("photoPreview").classList.add("hidden");
+    $("photoPreview").removeAttribute("src");
+    $("removePhoto").classList.add("hidden");
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      previewUrl = null;
+    }
+  }
+
+  $("photo").addEventListener("change", () => {
+    clearCapturedPhoto();
+    const file = $("photo").files?.[0];
+    const problem = validatePhoto(file);
+    if (problem) {
+      $("photo").value = "";
+      message("formStatus", problem, true);
+      return;
+    }
+    clearMessage("formStatus");
+  });
+
+  $("removePhoto").addEventListener("click", () => {
+    clearCapturedPhoto();
+    $("photo").value = "";
+    message("cameraStatus", "Photo removed. You can submit without a photo.");
+  });
+
+  async function uploadPhoto(file) {
+    const problem = validatePhoto(file);
+    if (problem) throw new Error(problem);
+
+    const extension = file.type === "image/png" ? "png" :
+      file.type === "image/webp" ? "webp" : "jpg";
+    const path = `${currentUser.id}/${crypto.randomUUID()}.${extension}`;
+
+    const {error} = await db.storage.from(PHOTO_BUCKET).upload(path, file, {
+      contentType:file.type,
+      cacheControl:"3600",
+      upsert:false
+    });
+    if (error) throw new Error("Photo upload failed: " + error.message);
+    return path;
+  }
+
   $("complaintForm").addEventListener("submit", async event => {
     event.preventDefault();
-    if (!currentUser) {
-      message("formStatus", "Please sign in before submitting a complaint.", true);
-      return;
-    }
+    if (!currentUser) return message("formStatus", "Please sign in before submitting a complaint.", true);
     if (busy) return;
 
-    const file = $("photo").files?.[0];
-    if (file && !capturedPhoto) {
-      message("formStatus",
-        "Photo upload is not configured yet. Remove the selected photo to submit the text complaint, or wait until secure Storage is enabled.", true);
-      return;
-    }
-    if (capturedPhoto) {
-      message("formStatus",
-        "Camera capture works, but secure photo upload is not configured yet. Remove the photo preview to submit the text complaint.", true);
-      return;
-    }
+    const file = getSelectedPhoto();
+    const photoProblem = validatePhoto(file);
+    if (photoProblem) return message("formStatus", photoProblem, true);
 
     busy = true;
     const button = $("submitComplaint");
     setBusy(button, true, "Submitting…");
     clearMessage("formStatus");
 
+    let uploadedPath = null;
+
     try {
+      if (file) {
+        message("formStatus", "Uploading your photo securely…");
+        uploadedPath = await uploadPhoto(file);
+      }
+
       const complaint = {
-        state: $("state").value.trim(),
-        city: $("city").value.trim(),
-        road: $("road").value.trim(),
-        landmark: $("landmark").value.trim() || null,
-        category: $("category").value,
-        description: $("description").value.trim(),
-        user_id: currentUser.id,
-        status: "submitted",
-        photo_path: null
+        state:$("state").value.trim(),
+        city:$("city").value.trim(),
+        road:$("road").value.trim(),
+        landmark:$("landmark").value.trim() || null,
+        category:$("category").value,
+        description:$("description").value.trim(),
+        user_id:currentUser.id,
+        status:"submitted",
+        photo_path:uploadedPath
       };
 
-      const {error} = await db.from("complaints").insert(complaint);
+      const {data, error} = await db.from("complaints")
+        .insert(complaint)
+        .select("id")
+        .single();
+
       if (error) throw error;
 
-      message("formStatus",
-        "Your complaint was saved successfully. Its municipal assignment depends on whether a matching active routing rule exists.");
+      let resultMessage = "Your complaint was saved successfully.";
+      if (uploadedPath) resultMessage += " Your photo was uploaded to private storage.";
+
+      // The notification function must be deployed and configured separately.
+      const notify = await db.functions.invoke("notify-complaint", {
+        body:{complaint_id:data.id}
+      });
+
+      if (notify.error) {
+        console.warn("Email notification was not sent:", notify.error);
+        resultMessage += " The complaint is saved, but the email notification could not be confirmed.";
+      } else {
+        resultMessage += " The notification service was contacted.";
+      }
+
+      message("formStatus", resultMessage);
       $("complaintForm").reset();
-      capturedPhoto = null;
-      $("photoPreview").classList.add("hidden");
+      clearCapturedPhoto();
       await loadComplaints();
     } catch (error) {
       console.error("Complaint submission failed:", error);
-      message("formStatus",
-        "The complaint could not be saved: " + (error.message || "Unknown error") +
-        "\nCheck your Supabase connection, INSERT policy and required columns.", true);
+      let text = error.message || "Unknown error";
+      if (uploadedPath) {
+        text += "\nA photo may already have been uploaded. If the complaint was not saved, you can retry; unused uploaded files may need cleanup.";
+      }
+      message("formStatus", "The complaint could not be fully submitted: " + text, true);
     } finally {
       busy = false;
       setBusy(button, false);
     }
   });
+
+  async function linkOfficialAccount() {
+    if (!currentUser) return message("officialStatus", "Sign in first.", true);
+    const button = $("linkOfficial");
+    setBusy(button, true, "Linking account…");
+    clearMessage("officialStatus");
+    try {
+      const {data, error} = await db.rpc("link_my_municipal_account");
+      if (error) throw error;
+      message("officialStatus",
+        typeof data === "string" ? data : "Your account-link request completed. If no eligible official record was found, ask the administrator to check your registered email and active status.");
+    } catch (error) {
+      console.error(error);
+      message("officialStatus",
+        "Could not link your account: " + (error.message || "Unknown error") +
+        "\nConfirm that the link_my_municipal_account SQL function has been created in Supabase.", true);
+    } finally {
+      setBusy(button, false);
+    }
+  }
+  $("linkOfficial").addEventListener("click", linkOfficialAccount);
 
   function resetRoutingForm() {
     $("routingForm").reset();
@@ -547,47 +588,41 @@ footer {text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:
     $("cancelEdit").classList.add("hidden");
     clearMessage("routingStatus");
   }
-
   $("cancelEdit").addEventListener("click", resetRoutingForm);
 
   async function loadRoutingRules() {
+    if (!currentUser || normalise(currentUser.email) !== OWNER_EMAIL) return;
     const target = $("routingList");
     target.replaceChildren(makeElement("div", "empty", "Loading assignments…"));
 
-    const {data, error} = await db
-      .from("routing_rules")
+    const {data, error} = await db.from("routing_rules")
       .select("id,official_id,state,city,road,landmark,created_at")
       .order("created_at", {ascending:false})
       .limit(200);
 
     if (error) {
       console.error(error);
-      target.replaceChildren(makeElement("div", "empty",
-        "Couldn't load routing rules. Check the admin RLS policy."));
+      target.replaceChildren(makeElement("div", "empty", "Couldn't load routing rules. Check the admin RLS policy."));
       return;
     }
 
     routingRows = data || [];
     if (!routingRows.length) {
-      target.replaceChildren(makeElement("div", "empty",
-        "No assignments saved yet. Use the form above to add your first municipal team."));
+      target.replaceChildren(makeElement("div", "empty", "No assignments saved yet. Use the form above to add your first municipal team."));
       return;
     }
 
-    const officialIds = [...new Set(routingRows.map(r => r.official_id).filter(Boolean))];
+    const officialIds = [...new Set(routingRows.map(row => row.official_id).filter(Boolean))];
     let officials = [];
     if (officialIds.length) {
       const result = await db.from("municipal_officials")
-        .select("id,email,official_name,active")
+        .select("id,email,official_name,active,user_id")
         .in("id", officialIds);
-      if (result.error) {
-        console.error(result.error);
-      } else {
-        officials = result.data || [];
-      }
+      if (result.error) console.error(result.error);
+      else officials = result.data || [];
     }
 
-    const officialMap = new Map(officials.map(o => [o.id, o]));
+    const officialMap = new Map(officials.map(official => [official.id, official]));
     target.replaceChildren();
     const cards = makeElement("div", "cards");
 
@@ -601,8 +636,8 @@ footer {text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:
         rule.road ? "Road: " + rule.road : "All roads",
         rule.landmark ? "Landmark: " + rule.landmark : ""
       ].filter(Boolean).join(" · ")));
-      card.appendChild(makeElement("span", "badge",
-        official?.active ? "Active official" : "Inactive / unavailable"));
+      card.appendChild(makeElement("span", "badge", official?.active ? "Active official" : "Inactive / unavailable"));
+      card.appendChild(makeElement("div", "note", official?.user_id ? "Account linked" : "Account not linked"));
 
       const actions = makeElement("div", "item-actions");
       addButton(actions, "Edit", "light", () => {
@@ -618,9 +653,10 @@ footer {text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:
         clearMessage("routingStatus");
         $("routingForm").scrollIntoView({behavior:"smooth", block:"start"});
       });
+
       addButton(actions, "Delete", "danger", async () => {
-        if (!confirm("Delete this routing rule? This does not delete existing complaints.")) return;
-        const {error: deleteError} = await db.from("routing_rules").delete().eq("id", rule.id);
+        if (!confirm("Delete this routing rule? Existing complaints will not be deleted.")) return;
+        const {error:deleteError} = await db.from("routing_rules").delete().eq("id", rule.id);
         if (deleteError) {
           message("routingStatus", "Couldn't delete rule: " + deleteError.message, true);
           return;
@@ -637,7 +673,7 @@ footer {text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:
 
   $("routingForm").addEventListener("submit", async event => {
     event.preventDefault();
-    if (!currentUser || currentUser.email?.toLowerCase() !== OWNER_EMAIL) {
+    if (!currentUser || normalise(currentUser.email) !== OWNER_EMAIL) {
       message("routingStatus", "Only the configured admin account can manage assignments.", true);
       return;
     }
@@ -649,7 +685,7 @@ footer {text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:
     clearMessage("routingStatus");
 
     try {
-      const email = $("routeEmail").value.trim().toLowerCase();
+      const email = normalise($("routeEmail").value);
       const officialName = $("routeName").value.trim();
       const state = $("routeState").value.trim();
       const city = $("routeCity").value.trim();
@@ -657,9 +693,8 @@ footer {text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:
       const landmark = $("routeLandmark").value.trim();
       const editId = $("routeEditId").value;
 
-      // Find an existing municipal record first; preserve its user_id.
       const found = await db.from("municipal_officials")
-        .select("id,user_id")
+        .select("id,user_id,email")
         .eq("email", email)
         .limit(1);
 
@@ -682,30 +717,31 @@ footer {text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:
       }
 
       const rule = {
-        official_id: officialId,
+        official_id:officialId,
         state,
         city,
-        road: road || null,
-        landmark: landmark || null
+        road:road || null,
+        landmark:landmark || null
       };
 
       if (editId) {
-        const updatedRule = await db.from("routing_rules")
-          .update(rule).eq("id", editId);
+        const updatedRule = await db.from("routing_rules").update(rule).eq("id", editId);
         if (updatedRule.error) throw updatedRule.error;
       } else {
-        // Avoid adding a duplicate for the same location and official.
-        const existing = await db.from("routing_rules")
-          .select("id")
+        // Keep a city-wide rule separate from road/landmark-specific rules.
+        let query = db.from("routing_rules").select("id")
           .eq("official_id", officialId)
           .eq("state", state)
-          .eq("city", city)
-          .limit(1);
+          .eq("city", city);
+
+        query = road ? query.eq("road", road) : query.is("road", null);
+        query = landmark ? query.eq("landmark", landmark) : query.is("landmark", null);
+
+        const existing = await query.limit(1);
         if (existing.error) throw existing.error;
 
         if (existing.data?.length) {
-          const updatedRule = await db.from("routing_rules")
-            .update(rule).eq("id", existing.data[0].id);
+          const updatedRule = await db.from("routing_rules").update(rule).eq("id", existing.data[0].id);
           if (updatedRule.error) throw updatedRule.error;
         } else {
           const insertedRule = await db.from("routing_rules").insert(rule);
@@ -720,7 +756,7 @@ footer {text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:
       console.error("Routing save failed:", error);
       message("routingStatus",
         "Could not save the assignment: " + (error.message || "Unknown error") +
-        "\nCheck the admin policies, required fields, and database constraints.", true);
+        "\nCheck admin policies, required fields, and database constraints.", true);
     } finally {
       busy = false;
       setBusy(button, false);
@@ -728,16 +764,13 @@ footer {text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:
     }
   });
 
-  // Camera: a one-time app introduction; browser permission is requested
-  // only after the user presses Enable camera.
   function cameraChoice() {
     try { return localStorage.getItem("civicfix-camera-choice"); }
     catch { return null; }
   }
-
   function setCameraChoice(value) {
     try { localStorage.setItem("civicfix-camera-choice", value); }
-    catch { /* App remains usable if storage is unavailable. */ }
+    catch {}
   }
 
   function closeCamera() {
@@ -751,40 +784,32 @@ footer {text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:
 
   async function startCamera() {
     if (!navigator.mediaDevices?.getUserMedia) {
-      message("cameraStatus", "Camera access requires HTTPS and a browser that supports camera capture.");
       $("cameraBox").classList.remove("hidden");
-      return;
+      return message("cameraStatus", "Camera access requires HTTPS and a supported browser.", true);
     }
-
     try {
       cameraStream = await navigator.mediaDevices.getUserMedia({
         video:{facingMode:{ideal:"environment"}}, audio:false
       });
       $("cameraVideo").srcObject = cameraStream;
       $("cameraBox").classList.remove("hidden");
-      $("cameraStatus").textContent =
-        "Camera is active. Choose Capture photo when you're ready.";
+      message("cameraStatus", "Camera is active. Choose Capture photo when you're ready.");
     } catch (error) {
       console.error(error);
       $("cameraBox").classList.remove("hidden");
       message("cameraStatus",
         error.name === "NotAllowedError"
-          ? "Camera permission was denied. You can still submit a complaint without a photo."
-          : "Couldn't open the camera. Check browser permission and try again.");
+          ? "Camera permission was denied. You can still submit without a photo."
+          : "Couldn't open the camera. Check browser permissions and try again.", true);
     }
   }
 
   $("openCamera").addEventListener("click", async () => {
-    const choice = cameraChoice();
-    if (choice === "declined") {
-      message("cameraStatus", "Camera was previously declined. You can change browser permissions and try again.");
+    if (cameraChoice() === "declined") {
       $("cameraBox").classList.remove("hidden");
-      return;
+      return message("cameraStatus", "Camera introduction was previously declined. You can still choose a photo file.");
     }
-    if (choice === "allowed") {
-      await startCamera();
-      return;
-    }
+    if (cameraChoice() === "allowed") return startCamera();
     $("cameraModal").classList.remove("hidden");
   });
 
@@ -797,47 +822,34 @@ footer {text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:
   $("skipCamera").addEventListener("click", () => {
     $("cameraModal").classList.add("hidden");
     setCameraChoice("declined");
-    $("cameraStatus").textContent = "No problem. You can report an issue without a photo.";
+    message("cameraStatus", "No problem. You can report an issue without a photo.");
   });
 
   $("capturePhoto").addEventListener("click", () => {
     const video = $("cameraVideo");
-    if (!video.videoWidth) {
-      message("cameraStatus", "Wait for the camera preview to appear, then try again.");
-      return;
-    }
+    if (!video.videoWidth) return message("cameraStatus", "Wait for the camera preview to appear, then try again.", true);
     const canvas = $("cameraCanvas");
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
-    canvas.getContext("2d").drawImage(video, 0, 0);
+    const context = canvas.getContext("2d");
+    if (!context) return message("cameraStatus", "This browser could not prepare the photo.", true);
+    context.drawImage(video, 0, 0);
+
     canvas.toBlob(blob => {
-      if (!blob) {
-        message("cameraStatus", "Couldn't capture the photo. Please try again.");
-        return;
-      }
+      if (!blob) return message("cameraStatus", "Couldn't capture the photo. Please try again.", true);
+      clearCapturedPhoto();
       capturedPhoto = new File([blob], "civicfix-photo.jpg", {type:"image/jpeg"});
-      const preview = $("photoPreview");
-      preview.src = URL.createObjectURL(capturedPhoto);
-      preview.classList.remove("hidden");
-      message("cameraStatus",
-        "Photo captured locally. Secure photo upload has not been configured yet; the image will not be sent with the complaint.");
+      previewUrl = URL.createObjectURL(capturedPhoto);
+      $("photoPreview").src = previewUrl;
+      $("photoPreview").classList.remove("hidden");
+      $("removePhoto").classList.remove("hidden");
       closeCamera();
+      message("cameraStatus", "Photo captured. It will be uploaded when you submit the complaint.");
     }, "image/jpeg", 0.88);
   });
 
   $("closeCamera").addEventListener("click", closeCamera);
-
-  // Show the camera introduction once per browser storage profile, only
-  // after the user interacts with the photo feature. Never activate camera
-  // or request browser permission automatically on page load.
-  if (!cameraChoice()) {
-    // No automatic camera prompt. The user sees the introduction when
-    // they choose "Take a photo", which is a clear, user-initiated action.
-  }
-
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) closeCamera();
-  });
+  document.addEventListener("visibilitychange", () => { if (document.hidden) closeCamera(); });
   window.addEventListener("pagehide", closeCamera);
 
   if (!db) {
@@ -845,10 +857,10 @@ footer {text-align:center;padding:25px;color:#81887c;font-size:11px;line-height:
     return;
   }
 
-  db.auth.onAuthStateChange((event) => {
-    if (["SIGNED_IN","SIGNED_OUT","INITIAL_SESSION","TOKEN_REFRESHED"].includes(event)) {
-      // Defer database work to avoid doing Supabase queries inside the auth callback.
-      setTimeout(() => updatePage(), 0);
+  db.auth.onAuthStateChange(event => {
+    if (["SIGNED_IN","SIGNED_OUT","INITIAL_SESSION","TOKEN_REFRESHED","USER_UPDATED"].includes(event)) {
+      // Defer queries so they do not run inside the auth callback.
+      Promise.resolve().then(updatePage);
     }
   });
 
