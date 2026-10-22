@@ -175,18 +175,29 @@ footer { text-align:center; padding:25px; color:#81887c; font-size:11px; }
     SUPABASE_PUBLISHABLE_KEY
   );
 
-  async function signIn() {
-    try {
-      const { error } = await db.auth.signInWithOAuth({
-        provider: "google",
-        options: { redirectTo: window.location.origin }
-      });
-      if (error) showMessage("Sign-in error: " + error.message);
-    } catch (error) {
-      showMessage("Could not start sign-in. Please refresh and try again.");
-      console.error(error);
+  
+async function signIn() {
+  try {
+    const { error } = await db.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: window.location.origin,
+        queryParams: {
+          prompt: "select_account"
+        }
+      }
+    });
+
+    if (error) {
+      console.error("Google sign-in error:", error.message);
+      alert("Sign-in failed: " + error.message);
     }
+  } catch (err) {
+    console.error("Unexpected sign-in error:", err);
+    alert("Something went wrong. Please try again.");
   }
+}
+
 
   async function signOut() {
     const { error } = await db.auth.signOut();
